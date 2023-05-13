@@ -1,12 +1,142 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Draw icons</title>
+    <title>Draw tools</title>
+    <style>
+        body,
+        html,
+        #viewDiv {
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <script>
+        require([
+            'esri/Map',
+            'esri/config',
+            'esri/views/MapView',
+
+            'esri/widgets/BasemapGallery',
+            'esri/widgets/BasemapToggle',
+            'esri/widgets/Search',
+            'esri/widgets/Expand',
+            'esri/widgets/AreaMeasurement2D',
+            'esri/widgets/Print',
+            'esri/widgets/Home',
+            'esri/widgets/DistanceMeasurement2D'
+        ], function (
+            Map,
+            esriConfig,
+            MapView,
+            BasemapGallery,
+            BasemapToggle,
+            Search,
+            Expand,
+            AreaMeasurement2D,
+            Print,
+            Home,
+            DistanceMeasurement2D
+        ) {
+            esriConfig.apiKey = 'AAPKfc4b18b468414951818ffeba82f9b258GCLEz3Ahp7jNW5vYhYPzqDmfnL7z6X3iC2uYk62u2xv95LdQqq8s71ff7vxDCYw_';
+            const map = new Map({
+                basemap: "arcgis-imagery"
+            });
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [36.8219, 1.2921],
+                zoom: 10
+            });
+            var basemapToggle = new BasemapToggle({
+                view: view,
+                nextBasemap: "arcgis-imagery"
+            });
+            // view.ui.add(basemapToggle,'bottom-right');
+            const basemapGallery = new BasemapGallery({
+                view: view,
+                source: {
+                    query: {
+                        title: '"World Basemaps for Developers" AND owner:esri'
+                    }
+                }
+            });
+
+            // view.ui.add(basemapGallery, "top-left"); // Add to the view
+            const search = new Search({
+                view: view
+            })
+            view.ui.add(search, "top-right"); // Add to the view
+
+            const bgExpand = new Expand({
+                view: view,
+                content: basemapGallery
+            });
+            view.ui.add(bgExpand, "top-left"); // Add to the view
+            const areaMeasurement2D = new AreaMeasurement2D({
+                view: view,
+            });
+            
+            const measurementIcon = document.createElement("div");
+            measurementIcon.className = "esri-icon-measure-area";
+
+            // adding event Listener to the icon on click
+            measurementIcon.addEventListener("click",function () {
+                areaMeasurement2D.visible = !areaMeasurement2D.visible;
+            });
+
+            // changeicon background color based on the click
+            if (areaMeasurement2D.visible) {
+                measurementIcon.style.backgroundColor = "#0079c1";
+            }
+            else{
+                 measurementIcon.style.backgroundColor = "";
+            }
+            view.ui.add(measurementIcon, "top-right"); // Add to
+            view.ui.add(areaMeasurement2D, "bottom-right"); // Add to
+            // adding the print service of the map
+            const print = new Print({
+                view:view,
+                printServiceUrl: "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+            });
+            view.ui.add(print,'top-right');
+            const home = new Home({
+                view:view
+            })
+            view.ui.add(home,'top-left');
+            // Add the DistanceMeasurement2D widget to the view
+            const distanceMeasurementWidget = new DistanceMeasurement2D({
+                view: view
+            });
+             // Create a custom widget that contains an icon for distance measurement
+            const distanceMeasurementIcon = document.createElement("div");
+            distanceMeasurementIcon.className = "esri-icon-measure-line";
+
+            // Add an event listener to the icon that toggles the visibility of the DistanceMeasurement2D widget
+            distanceMeasurementIcon.addEventListener("click", function () {
+                distanceMeasurementWidget.visible = !distanceMeasurementWidget.visible;
+
+                // Change the icon's background color based on the visibility of the DistanceMeasurement2D widget
+                if (distanceMeasurementWidget.visible) {
+                    distanceMeasurementIcon.style.backgroundColor = "#0079c1";
+                } else {
+                    distanceMeasurementIcon.style.backgroundColor = "";
+                }
+            });
+            view.ui.add(distanceMeasurementWidget,'top-left')
+        })
+    </script>
 </head>
+
 <body>
-    
+    <div id="viewDiv"></div>
 </body>
+
 </html>
