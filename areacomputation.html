@@ -31,7 +31,9 @@
             'esri/widgets/AreaMeasurement2D',
             'esri/widgets/Print',
             'esri/widgets/Home',
-            'esri/widgets/DistanceMeasurement2D'
+            'esri/widgets/DistanceMeasurement2D',
+            'esri/widgets/Sketch',
+            'esri/layers/GraphicsLayer'
         ], function (
             Map,
             esriConfig,
@@ -43,7 +45,9 @@
             AreaMeasurement2D,
             Print,
             Home,
-            DistanceMeasurement2D
+            DistanceMeasurement2D,
+            Sketch,
+            GraphicsLayer
         ) {
             esriConfig.apiKey = 'AAPKfc4b18b468414951818ffeba82f9b258GCLEz3Ahp7jNW5vYhYPzqDmfnL7z6X3iC2uYk62u2xv95LdQqq8s71ff7vxDCYw_';
             const map = new Map({
@@ -89,7 +93,7 @@
                 expandIconClass: "esri-icon-measure-area",
                 view: view,
                 content: areaMeasurement2D,
-                expandTooltip: "Area"
+                expandTooltip: "Find Area"
             });
             view.ui.add(expandareaMeasurement2D, "top-right"); // Add to
 
@@ -101,7 +105,7 @@
                 expandIconClass: "esri-icon-measure-line",
                 view: view,
                 content: distanceMeasurementWidget,
-                expandTooltip: "Distance"
+                expandTooltip: "Measure Distance"
             });
             view.ui.add(expanddistanceMeasurementWidget, 'top-right')
 
@@ -114,8 +118,7 @@
                 expandIconClass: "esri-icon-printer",
                 view: view,
                 content: print,
-                 expandTooltip: "Print",
-                expandTooltip: "Print"
+                expandTooltip: "Print the map"
             });
             view.ui.add(expandPrint, 'top-right');
             const home = new Home({
@@ -123,7 +126,20 @@
             })
             view.ui.add(home, 'top-left');
 
-        })
+            // ////////////////////////////////////////Draw Functionalities
+            const graphicsLayer = new GraphicsLayer();
+            map.add(graphicsLayer);
+
+             // Add the Sketch widget to the view
+            const sketch = new Sketch({
+                layer: graphicsLayer,
+                view: view,
+                // graphic will be selected as soon as it is created
+                creationMode: "update"
+            });
+
+            view.ui.add(sketch, "top-right");
+        });
     </script>
 </head>
 
