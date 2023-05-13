@@ -80,33 +80,29 @@
                 content: basemapGallery
             });
             view.ui.add(bgExpand, "top-left"); // Add to the view
+            
             const areaMeasurement2D = new AreaMeasurement2D({
                 view: view,
             });
-            
-            const measurementIcon = document.createElement("div");
-            measurementIcon.className = "esri-icon-measure-area";
-
-            // adding event Listener to the icon on click
-            measurementIcon.addEventListener("click",function () {
-                areaMeasurement2D.visible = !areaMeasurement2D.visible;
+            let expandareaMeasurement2D = new Expand({
+                expandIconClass: "esri-icon-measure-area",
+                view: view,
+                content: areaMeasurement2D
             });
+            view.ui.add(expandareaMeasurement2D, "top-right"); // Add to
 
-            // changeicon background color based on the click
-            if (areaMeasurement2D.visible) {
-                measurementIcon.style.backgroundColor = "#0079c1";
-            }
-            else{
-                 measurementIcon.style.backgroundColor = "";
-            }
-            view.ui.add(measurementIcon, "top-right"); // Add to
-            view.ui.add(areaMeasurement2D, "bottom-right"); // Add to
             // adding the print service of the map
             const print = new Print({
                 view:view,
                 printServiceUrl: "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
             });
-            view.ui.add(print,'top-right');
+            let expandPrint = new Expand({
+                expandIconClass: "esri-icon-printer",
+                view: view,
+                content: print
+            });
+            
+            view.ui.add(expandPrint,'top-right');
             const home = new Home({
                 view:view
             })
@@ -115,22 +111,13 @@
             const distanceMeasurementWidget = new DistanceMeasurement2D({
                 view: view
             });
-             // Create a custom widget that contains an icon for distance measurement
-            const distanceMeasurementIcon = document.createElement("div");
-            distanceMeasurementIcon.className = "esri-icon-measure-line";
-
-            // Add an event listener to the icon that toggles the visibility of the DistanceMeasurement2D widget
-            distanceMeasurementIcon.addEventListener("click", function () {
-                distanceMeasurementWidget.visible = !distanceMeasurementWidget.visible;
-
-                // Change the icon's background color based on the visibility of the DistanceMeasurement2D widget
-                if (distanceMeasurementWidget.visible) {
-                    distanceMeasurementIcon.style.backgroundColor = "#0079c1";
-                } else {
-                    distanceMeasurementIcon.style.backgroundColor = "";
-                }
+            let expanddistanceMeasurementWidget = new Expand({
+                expandIconClass: "esri-icon-measure-line",
+                view: view,
+                content: distanceMeasurementWidget
             });
-            view.ui.add(distanceMeasurementWidget,'top-left')
+            
+            view.ui.add(expanddistanceMeasurementWidget,'top-left')
         })
     </script>
 </head>
