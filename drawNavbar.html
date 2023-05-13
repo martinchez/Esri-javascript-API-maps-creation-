@@ -144,18 +144,20 @@
             const sketch = new Sketch({
                 layer: graphicsLayer,
                 view: view,
-                // graphic will be selected as soon as it is created
-                creationMode: "update"
+               availableCreateTools: ["polygon"]
             });
-
-            view.ui.add(sketch, "top-right");
+            document.getElementById("digitize").addEventListener("click", function () {
+                sketch.create("polygon");
+            });
+            // view.ui.add(sketch, "top-right");
+            
         });
     </script>
 </head>
 
 <body>
     <div id="sidebar">
-        <button class="esri-icon-edit"> Edit</button>
+        <button id="digitize" class="btn btn-danger esri-icon-polygon"> Add your percels</button>
     </div>
     <div id="viewDiv"></div>
 </body>
