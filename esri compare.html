@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw tools</title>
+    <style>
+        body,
+        html {
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+
+        #sidebar {
+            float: left;
+            width: 200px;
+            height: 100%;
+            background-color: #f3f3f3;
+        }
+
+        #viewDiv {
+            height: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.26/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.26/"></script>
+    <script>
+        require([
+            'esri/Map',
+            'esri/config',
+            'esri/views/MapView',
+
+            'esri/widgets/BasemapGallery',
+            'esri/widgets/BasemapToggle',
+            'esri/widgets/Search',
+            'esri/widgets/Expand',
+            'esri/widgets/AreaMeasurement2D',
+            'esri/widgets/Print',
+            'esri/widgets/Home',
+            'esri/widgets/DistanceMeasurement2D',
+            'esri/widgets/Sketch',
+            'esri/layers/GraphicsLayer',
+            // "esri/widgets/Compare"
+            // 'esri/widgets/Compare'
+        ], function (
+            Map,
+            esriConfig,
+            MapView,
+            BasemapGallery,
+            BasemapToggle,
+            Search,
+            Expand,
+            AreaMeasurement2D,
+            Print,
+            Home,
+            DistanceMeasurement2D,
+            Sketch,
+            GraphicsLayer,
+            // Compare
+            // Compare
+        ) {
+            esriConfig.apiKey = 'AAPKfc4b18b468414951818ffeba82f9b258GCLEz3Ahp7jNW5vYhYPzqDmfnL7z6X3iC2uYk62u2xv95LdQqq8s71ff7vxDCYw_';
+            const map = new Map({
+                basemap: "arcgis-imagery"
+            });
+            const map1 = new Map({
+                basemap: "satellite"
+            })
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [36.8219, 1.2921],
+                zoom: 10
+            });
+            // ////////////////////////////////////////Basemap Additions
+            var basemapToggle = new BasemapToggle({
+                view: view,
+                nextBasemap: "arcgis-imagery"
+            });
+            const basemapGallery = new BasemapGallery({
+                view: view,
+                source: {
+                    query: {
+                        title: '"World Basemaps for Developers" AND owner:esri'
+                    }
+                }
+            });
+            const bgExpand = new Expand({
+                view: view,
+                content: basemapGallery,
+                expandTooltip: "BaseMaps"
+            });
+            view.ui.add(bgExpand, "top-left"); // Add to the view
+
+            // ////////////////////////////////////////Search Additions
+            const search = new Search({
+                view: view
+            })
+            view.ui.add(search, "top-right"); // Add to the view
+
+            // ////////////////////////////////////////Area Mearutement
+            const areaMeasurement2D = new AreaMeasurement2D({
+                view: view,
+            });
+            let expandareaMeasurement2D = new Expand({
+                expandIconClass: "esri-icon-measure-area",
+                view: view,
+                content: areaMeasurement2D,
+                expandTooltip: "Find Area"
+            });
+            view.ui.add(expandareaMeasurement2D, "top-right"); // Add to
+
+            // ////////////////////////////////////////Distance Mearutement
+            const distanceMeasurementWidget = new DistanceMeasurement2D({
+                view: view
+            });
+            let expanddistanceMeasurementWidget = new Expand({
+                expandIconClass: "esri-icon-measure-line",
+                view: view,
+                content: distanceMeasurementWidget,
+                expandTooltip: "Measure Distance"
+            });
+            view.ui.add(expanddistanceMeasurementWidget, 'top-right')
+
+            // ////////////////////////////////////////Print Functionalities
+            const print = new Print({
+                view: view,
+                printServiceUrl: "https://utility.arcgisonline.com/arcgis/rest/services/Utilities/PrintingTools/GPServer/Export%20Web%20Map%20Task"
+            });
+            let expandPrint = new Expand({
+                expandIconClass: "esri-icon-printer",
+                view: view,
+                content: print,
+                expandTooltip: "Print the map"
+            });
+            view.ui.add(expandPrint, 'top-right');
+            const home = new Home({
+                view: view
+            })
+            view.ui.add(home, 'top-left');
+
+            // ////////////////////////////////////////Draw Functionalities
+            const graphicsLayer = new GraphicsLayer();
+            map.add(graphicsLayer);
+
+            // Add the Sketch widget to the view
+            const sketch = new Sketch({
+                layer: graphicsLayer,
+                view: view,
+                availableCreateTools: ["polygon"]
+            });
+            document.getElementById("digitize").addEventListener("click", function () {
+                sketch.create("polygon");
+            });
+            // view.ui.add(sketch, "top-right");
+
+            // ////////////////////////////////////////Compare Functionalities
+            
+            //  const compare = new Compare({
+            //     view: view,
+            //     layer1: map.basemap.baseLayers.getItemAt(0),
+            //     layer2: map1.basemap.baseLayers.getItemAt(0),
+            // });
+
+            // view.ui.add(compare);
+        });
+    </script>
+</head>
+
+<body>
+    <div id="sidebar">
+        <button id="digitize" class="btn btn-danger esri-icon-polygon"> Add your percels</button>
+    </div>
+    <div id="viewDiv"></div>
+</body>
+
+</html>
