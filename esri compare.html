@@ -44,7 +44,7 @@
             'esri/widgets/DistanceMeasurement2D',
             'esri/widgets/Sketch',
             'esri/layers/GraphicsLayer',
-            // "esri/widgets/Compare"
+            'esri/widgets/Compare'
             // 'esri/widgets/Compare'
         ], function (
             Map,
@@ -60,7 +60,7 @@
             DistanceMeasurement2D,
             Sketch,
             GraphicsLayer,
-            // Compare
+            Compare
             // Compare
         ) {
             esriConfig.apiKey = 'AAPKfc4b18b468414951818ffeba82f9b258GCLEz3Ahp7jNW5vYhYPzqDmfnL7z6X3iC2uYk62u2xv95LdQqq8s71ff7vxDCYw_';
@@ -68,7 +68,7 @@
                 basemap: "arcgis-imagery"
             });
             const map1 = new Map({
-                basemap: "satellite"
+                basemap: "arcgis-imagery"
             })
             const view = new MapView({
                 container: "viewDiv",
@@ -159,14 +159,13 @@
             // view.ui.add(sketch, "top-right");
 
             // ////////////////////////////////////////Compare Functionalities
-            
-            //  const compare = new Compare({
-            //     view: view,
-            //     layer1: map.basemap.baseLayers.getItemAt(0),
-            //     layer2: map1.basemap.baseLayers.getItemAt(0),
-            // });
+            const compare = new Compare({
+                view: view,
+                layer1: map1.basemap.baseLayers.getItemAt(0),
+                layer2: map2.basemap.baseLayers.getItemAt(0),
+            });
 
-            // view.ui.add(compare);
+            view.ui.add(compare);
         });
     </script>
 </head>
